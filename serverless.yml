@@ -1,0 +1,12 @@
+service: serverless-graphql-starter
+provider:
+  name: aws
+  runtime: nodejs4.3
+functions:
+    graphQl:
+        handler: index.handle
+        events:
+            - http:
+                path: graphql
+                method: post
+                cors: true
