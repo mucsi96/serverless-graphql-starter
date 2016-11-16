@@ -2,6 +2,8 @@ service: serverless-graphql-starter
 provider:
   name: aws
   runtime: nodejs4.3
+  cfLogs: true
+  region: eu-central-1
 functions:
     graphQl:
         handler: index.handle

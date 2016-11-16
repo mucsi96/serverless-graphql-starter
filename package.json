@@ -2,21 +2,20 @@
   "name": "serverless-graphql-starter",
   "version": "0.1.0",
   "description": "Starter project for GraphQL serverless backend based on Node.js, Express, ES7 Async Await, AWS Lambda, Amazon DynamoDB",
-  "main": "src/server/index.js",
+  "main": "src/lambda/index.js",
   "engines": {
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "build:api": "babel --out-dir=dist/server src/server",
-    "build:api-config": "cp package.json serverless.yml .env dist/server",
-    "build:api-package": "cd dist/server && npm install --production",
-    "deploy:api": "rm -rf dist && npm run build:api && npm run build:api-config && npm run build:api-package && cd dist/server && serverless --stage=production deploy",
-    "test": "cucumberjs --compiler js:babel-register test/server",
-    "test:watch": "parallelshell \"esw src/server -w\" \"babel-watch node_modules/cucumber/bin/cucumber.js test/server\" ",
-    "test:cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text cucumberjs --compiler js:babel-register test/server",
-    "lint": "eslint src/server",
-    "dev": "babel-watch src/server/index.js",
-    "dev:watch": "parallelshell \"esw src/server -w\" \"npm run dev -s\" "
+    "build:lambda": "babel --out-dir=dist/lambda src/lambda",
+    "build:lambda-config": "mkdirp dist/lambda && cp package.json serverless.yml .env dist/lambda",
+    "build:lambda-dependencies": "cd dist/lambda && npm install --production",
+    "deploy:lambda-inc": "npm run build:lambda && cd dist/lambda && serverless --stage=production deploy",
+    "deploy:lambda": "rm -rf dist && npm run build:lambda-config && npm run build:lambda-dependencies && npm run deploy:lambda-inc",
+    "test": "cucumberjs --compiler js:babel-register test/lambda",
+    "test:watch": "parallelshell \"esw src/lambda -w\" \"babel-watch node_modules/cucumber/bin/cucumber.js test/lambda\" ",
+    "test:cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text cucumberjs --compiler js:babel-register test/lambda",
+    "lint": "eslint src/lambda"
   },
   "repository": {
     "type": "git",
@@ -56,6 +55,7 @@
     "eslint-plugin-promise": "^3.0.0",
     "eslint-plugin-standard": "^2.0.1",
     "eslint-watch": "^2.1.14",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.1.2",
     "nyc": "^8.4.0",
     "parallelshell": "^2.0.0",
